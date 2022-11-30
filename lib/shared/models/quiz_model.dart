@@ -1,24 +1,73 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:DevQuiz/shared/models/question_model.dart';
 
 enum Level {
-  dail,
+  facil,
   medio,
   dificil,
   perito,
 }
+
+extension LevelStringExt on String {
+  get parse => {
+        "facil": Level.facil,
+        "medio": Level.medio,
+        "dificil": Level.dificil,
+        "perito": Level.perito,
+      }[this];
+}
+
+extension LevelExt on Level {
+  String get parse => {
+        Level.facil: "facil",
+        Level.medio: "medio",
+        Level.dificil: "dificil",
+        Level.perito: "perito",
+      }[this] as String;
+}
+
+// extension LevelStringExt on String {
+//   Level get parse => {"facil": Level.facil, "medio": Level.medio, "dificil": Level.dificil, "perito": Level.perito}[this]!;
+// }
 
 class QuizModel {
   final String title;
   final List<QuestionModel> questions;
   final int questionAwnsers;
   final String image;
-  final Level level;
+  Level level;
 
   QuizModel({
     required this.title,
     required this.questions,
     this.questionAwnsers = 0,
     required this.image,
-    required this.level,
+    this.level = Level.facil,
   });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'title': title,
+      'questions': questions.map((x) => x.toMap()).toList(),
+      'questionAwnsers': questionAwnsers,
+      'image': image,
+      'level': level.parse!,
+    };
+  }
+
+  factory QuizModel.fromMap(Map<String, dynamic> map) {
+    return QuizModel(
+      title: map['title'] as String,
+      questions: List<QuestionModel>.from(map['questions']?.map((x) => QuestionModel.fromMap(x))),
+      questionAwnsers: map['questionAwnsers'] as int,
+      image: map['image'].toString(),
+      level: map['level'].toString().parse,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory QuizModel.fromJson(String source) => QuizModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }
