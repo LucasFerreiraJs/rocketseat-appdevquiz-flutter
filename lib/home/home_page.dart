@@ -1,3 +1,4 @@
+import 'package:DevQuiz/challenge/challenge_page.dart';
 import 'package:DevQuiz/challenge/widgets/quiz/quiz_widget.dart';
 import 'package:DevQuiz/core/app_colors.dart';
 import 'package:DevQuiz/home/home_controller.dart';
@@ -64,6 +65,16 @@ class _HomePageState extends State<HomePage> {
                             title: quiz.title,
                             percent: quiz.questionAwnsers / quiz.questions.length,
                             completed: "${quiz.questionAwnsers}/${quiz.questions.length}",
+                            onTap: () {
+                              // Navigator.push(context, CupertinoPageRoute(builder: (context) => ChallengePage()));
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChallengePage(
+                                            questions: quiz.questions,
+                                          )));
+                            },
                           ))
                       .toList(),
                 ),
