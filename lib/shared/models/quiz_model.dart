@@ -53,7 +53,7 @@ class QuizModel {
       'questions': questions.map((x) => x.toMap()).toList(),
       'questionAwnsers': questionAwnsers,
       'image': image,
-      'level': level.parse!,
+      'level': level.parse,
     };
   }
 
